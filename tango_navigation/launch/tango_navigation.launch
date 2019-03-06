@@ -1,0 +1,26 @@
+<launch>
+
+  <include file="$(find tango_bringup)/launch/tango_remote.launch"/>
+  <include file="$(find tango_control)/launch/diff_drive_nav.launch"/>
+
+  <arg name="map_file" default="$(find tango_navigation)/maps/lab2-complete.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="false">
+    <param name="frame_id" value="/map" />
+  </node>
+
+  <include file="$(find tango_navigation)/launch/amcl.launch"/>
+
+  <arg name="cmd_vel_topic" default="/twist" />
+  <arg name="odom_topic" default="/odom" />
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find tango_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find tango_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find tango_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find tango_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find tango_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find tango_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+  </node>
+</launch>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tango_control</name>
+  <version>1.0.0</version>
+  <description>The tango_control package</description>
+  <maintainer email="keiranburrows@hotmail.co.uk">Dr Keiran Burrows</maintainer>
+  <author email="keiranburrows@hotmail.co.uk">Dr Keiran Burrows</author>
+  <license>BSD</license>
+
+  <!--   <build_depend>message_generation</build_depend> -->
+  <!--   <exec_depend>message_runtime</exec_depend> -->
+  <buildtool_depend>catkin</buildtool_depend>
+ 
+  <build_depend>differential_drive</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tango_msgs</build_depend>
+  <build_depend>urdf</build_depend>
+  <build_depend>xacro</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+ 
+  <build_export_depend>differential_drive</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>tango_msgs</build_export_depend>
+  <build_export_depend>urdf</build_export_depend>
+  <build_export_depend>xacro</build_export_depend>
+ 
+  <exec_depend>differential_drive</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tango_msgs</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  
+  <export>
+   
+  </export>
+</package>

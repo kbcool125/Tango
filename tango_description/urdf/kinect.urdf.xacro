@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="kinect" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="kinect_mesh" value="package://tango_description/meshes/visual_model/kinect.dae"/>
+  <xacro:property name="kinect_collision_mesh" value="package://tango_description/meshes/collision_model/slam_collision.dae"/>
+  <xacro:property name="kinect_mass" value="0.340"/>
+
+  <xacro:macro name="kinect_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="0.0004827" ixy="-0.0000041" ixz="0.0000048" iyy="0.0004946" iyz="-0.0000173" izz="0.0007809" />
+    </inertial>
+  </xacro:macro>
+  
+  <xacro:macro name="kinect" params="prefix parent link_xyz link_rpy joint_xyz joint_rpy">
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <mesh filename="${kinect_mesh}"/>
+        </geometry>
+        <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
+      </visual>
+      
+      <collision>
+        <geometry>
+          <mesh filename="${kinect_collision_mesh}"/>
+        </geometry>
+        <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
+      </collision>
+        <xacro:kinect_inertial mass="${kinect_mass}"/>
+    </link>
+    
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${joint_xyz}" rpy="${joint_rpy}"/>
+    </joint>
+  
+  </xacro:macro>
+</robot>

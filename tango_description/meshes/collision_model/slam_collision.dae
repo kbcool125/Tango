@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.79.0 commit date:2017-09-11, commit time:10:43, hash:5bd8ac9</authoring_tool>
+    </contributor>
+    <created>2017-10-14T17:52:38</created>
+    <modified>2017-10-14T17:52:38</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="Material-collision-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.3254902 0.7294117 0.01568627 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <transparent opaque="A_ONE">
+              <color>1 1 1 1</color>
+            </transparent>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="Material-collision-material" name="Material-collision">
+      <instance_effect url="#Material-collision-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh" name="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0">
+      <mesh>
+        <source id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-positions">
+          <float_array id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-positions-array" count="72">-0.03445261 -0.1106293 0 -0.03445261 0.1079062 0.05420589 -0.03445261 -0.1098881 0.05420589 -0.03445261 0.1071649 0 -0.03445261 -0.1098881 0.05420589 -0.03445261 0.1079062 0.05420589 0.03445261 -0.1098881 0.05420589 0.03445261 0.1079062 0.05420589 0.03445261 0.1079062 0.05420589 0.03445261 -0.1106293 0 0.03445261 -0.1098881 0.05420589 0.03445261 0.1071649 0 0.03445261 -0.1106293 0 0.03445261 0.1071649 0 -0.03445261 -0.1106293 0 -0.03445261 0.1071649 0 -0.03445261 -0.1106293 0 0.03445261 -0.1106293 0 -0.03445261 -0.1098881 0.05420589 0.03445261 -0.1098881 0.05420589 -0.03445261 0.1071649 0 0.03445261 0.1071649 0 -0.03445261 0.1079062 0.05420589 0.03445261 0.1079062 0.05420589</float_array>
+          <technique_common>
+            <accessor source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-positions-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-normals">
+          <float_array id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-normals-array" count="24">-1 0 0 0 0 1 1 0 0 0 0 -1 0 -0.9999066 0.01367378 0 0.9999065 -0.01367378 0 -0.9999065 0.01367378 0 0.9999066 -0.01367378</float_array>
+          <technique_common>
+            <accessor source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-normals-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-map-0">
+          <float_array id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-map-0-array" count="72">0.669748 0.75966 0.669748 0 0.857352 0.002585947 0.2403399 0.998535 0.2403399 0.2403399 0.479214 0.2403399 0.480679 0.762246 0.480679 0.002585947 0.668283 0.75966 0 0.998535 0 0.2403399 0.238875 0.2403399 0.2403399 0.238875 0.429408 0.238875 0.429408 0 0 0.238875 0 0 0.189069 0 0.669748 0.75966 0.857352 0.002585947 0.857352 0.762246 0.2403399 0.998535 0.479214 0.2403399 0.479214 0.998535 0.480679 0.002585947 0.668283 0 0.668283 0.75966 0 0.998535 0.238875 0.2403399 0.238875 0.998535 0.2403399 0.238875 0.429408 0 0.2403399 0 0 0.238875 0.189069 0 0.189069 0.238875</float_array>
+          <technique_common>
+            <accessor source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-map-0-array" count="36" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-vertices">
+          <input semantic="POSITION" source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-positions"/>
+        </vertices>
+        <triangles material="Material-collision-material" count="12">
+          <input semantic="VERTEX" source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh-map-0" offset="2" set="0"/>
+          <p>3 0 0 0 0 1 2 0 2 5 1 3 4 1 4 6 1 5 8 2 6 10 2 7 11 2 8 13 3 9 12 3 10 14 3 11 17 4 12 19 4 13 18 4 14 21 5 15 20 5 16 22 5 17 3 0 18 2 0 19 1 0 20 5 1 21 6 1 22 7 1 23 10 2 24 9 2 25 11 2 26 13 3 27 14 3 28 15 3 29 17 6 30 18 6 31 16 6 32 21 7 33 22 7 34 23 7 35</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="e13f0830-9634-46f1-9ace-a9fe6d7ab2d0" name="e13f0830-9634-46f1-9ace-a9fe6d7ab2d0" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#mesh-e13f0830-9634-46f1-9ace-a9fe6d7ab2d0-mesh" name="e13f0830-9634-46f1-9ace-a9fe6d7ab2d0">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Material-collision-material" target="#Material-collision-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>

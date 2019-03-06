@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot name="common_properties" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="wheel_seperation" value="0.28"/>
+  <xacro:property name="wheel_diameter" value="0.136"/>
+  <xacro:property name="wheel_thickness" value="0.02"/>
+  <xacro:property name="wheel_center_height" value="0.0425"/>
+  <xacro:property name="caster_diameter" value="0.043"/>
+  
+  <xacro:property name="base_footprint_to_bottom_tier" value="0.0395"/>
+  <xacro:property name="base_link_to_base_tier" value="0.0395"/>
+  <xacro:property name="bottom_tier_to_first_tier" value="0.123"/>
+  <xacro:property name="first_tier_to_second_tier" value="0.105"/>
+  <xacro:property name="second_tier_to_third_tier" value="0.092"/>
+  <xacro:property name="third_tier_to_slam_tier" value="0.192"/>
+
+</robot>

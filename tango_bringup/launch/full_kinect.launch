@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find tango_bringup)/launch/minimal.launch"/>
+  <!-- include launch file for bringing up kinect -->
+</launch>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot name="bumper" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="bumper_inertial" params="mass height width depth">
+    <xacro:property name="bumper_inertia_xx" value="${(0.8333*mass)*((height*height)+(depth*depth))}"/>
+    <xacro:property name="bumper_inertia_yy" value="${(0.8333*mass)*((width*width)+(depth*depth))}"/>
+    <xacro:property name="bumper_inertia_zz" value="${(0.8333*mass)*((width*width)+(height*depth))}"/>
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="${bumper_inertia_xx}" ixy="0.0" ixz="0.0" iyy="${bumper_inertia_yy}" iyz="0.0" izz="${bumper_inertia_zz}" />
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="bumper" params="prefix parent link_xyz link_rpy joint_xyz joint_rpy mass height width depth">
+    <link name="${prefix}_link">
+      <visual>
+        <origin rpy="${link_rpy}" xyz="${link_xyz}"/>
+        <geometry>
+	  <box size="${width} ${depth} ${height}"/>
+        </geometry>
+      </visual>
+      
+      <collision>
+        <geometry>
+	  <box size="${width} ${depth} ${height}"/>
+        </geometry>
+        <origin rpy="${link_rpy}" xyz="${link_xyz}"/>
+      </collision>
+      <xacro:bumper_inertial mass="${mass}" height="${height}" width="${width}" depth="${depth}"/>
+    </link>
+    
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+      <origin rpy="${joint_rpy}" xyz="${joint_xyz}"/>
+    </joint>
+    
+    <!--<gazebo reference="${prefix}_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <material>Gazebo/Grey</material>
+      <turnGravityOff>false</turnGravityOff>
+      <sensor name="simple_collision_sensor" type="contact">
+        <selfCollide>false</selfCollide>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100.0</updateRate>
+        <material>Gazebo/Red</material>
+        <contact>
+	  <collision>bump_sensor_collision</collision>
+          <topic>simple_contact</topic>
+        </contact>
+        <plugin name="simple_collision_gazebo_ros_bumper_controller" filename="libgazebo_ros_bumper.so">   
+          <alwaysOn>true</alwaysOn>
+          <updateRate>100</updateRate>
+          <bumperTopicName>simple_collision_bumper</bumperTopicName>
+          <frameName>base_footprint</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>-->
+  </xacro:macro>
+  
+</robot>

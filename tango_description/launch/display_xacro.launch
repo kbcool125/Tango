@@ -1,0 +1,10 @@
+<launch>
+  <arg name="arcRobot" default="true" />
+  <arg name="gui" default="true" />
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find tango_description)/urdf/tango.urdf.xacro' --inorder arc:=$(arg arcRobot)"/>
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tango_rviz)/rviz/tango.rviz" />
+</launch>
+

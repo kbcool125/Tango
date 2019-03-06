@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot name="imu" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="imu_inertial" params="mass height width depth">
+    <xacro:property name="imu_inertia_xx" value="${(0.8333*mass)*((height*height)+(depth*depth))}"/>
+    <xacro:property name="imu_inertia_yy" value="${(0.8333*mass)*((width*width)+(depth*depth))}"/>
+    <xacro:property name="imu_inertia_zz" value="${(0.8333*mass)*((width*width)+(height*height))}"/>
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="${imu_inertia_xx}" ixy="0.0" ixz="0.0" iyy="${imu_inertia_yy}" iyz="0.0" izz="${imu_inertia_zz}" />
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="imu_sensor" params="prefix parent joint_xyz joint_rpy">  
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.03 0.02 0.01"/>
+        </geometry>
+        <material name="iRobot/Red"/>
+      </visual>
+    
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+	<geometry>
+	  <box size="0.03 0.02 0.01"/>
+	</geometry>
+      </collision>
+      <xacro:imu_inertial mass="0.01" height="0.1" width="0.03" depth="0.02"/>
+    </link>
+    
+    <joint name="${prefix}_joint" type="fixed">
+      <origin xyz="${joint_xyz}" rpy="${joint_rpy}"/>
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+    </joint>
+    
+    <gazebo >
+      <plugin name="imu" filename="libhector_gazebo_ros_imu.so">
+        <serviceName>/imu/calibrate</serviceName>
+        <updateRate>200.0</updateRate>
+        <bodyName>imu_link</bodyName>
+        <frameId>imu_link</frameId>
+        <topicName>imu</topicName>
+        <rpyOffset>0 0 0</rpyOffset>
+        <xyzOffset>0 0 0</xyzOffset>
+        <gaussianNoise>0.00000001</gaussianNoise>
+        <accelDrift>0.00000001 0.00000001 0.00000001</accelDrift>
+        <accelDriftFrequency>0.00000001 0.00000001 0.00000001</accelDriftFrequency>
+        <accelGaussianNoise>0.00000001 0.00000001 0.00000001</accelGaussianNoise>
+        <rateDrift>0.0 0.0 0.0</rateDrift>
+        <rateDriftFrequency>0.0 0.0 0.0</rateDriftFrequency>
+        <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
+        <headingDrift>0.0 0.0 0.0</headingDrift>
+        <headingDriftFrequency>0.0 0.0 0.0</headingDriftFrequency>
+        <headingGaussianNoise>0.0 0.0 0.0</headingGaussianNoise>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+  
+</robot>

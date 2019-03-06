@@ -1,0 +1,12 @@
+<launch>
+  <include file="$(find tango_description)/launch/display_xacro_nav.launch"/>
+
+  <node pkg="tango_control" type="motors" name="motors" output="screen"/>
+  <node pkg="tango_control" type="encoders" name="encoders" output="screen"/>
+  <node pkg="tango_control" type="infrareds" name="infrareds" output="screen"/>
+
+  <!--<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>-->
+</launch>
+

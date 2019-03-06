@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot name="caster" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="caster_inertial" params="mass radius">
+    <xacro:property name="caster_inertia_xx_yy_zz" value="${0.4*mass*radius*radius}"/>
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="${caster_inertia_xx_yy_zz}" ixy="0.0" ixz="0.0" iyy="${caster_inertia_xx_yy_zz}" iyz="0.0" izz="${caster_inertia_xx_yy_zz}" />
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="caster" params="prefix parent link_xyz link_rpy joint_xyz joint_rpy mass  radius">
+    <link name="${prefix}_link">
+      <visual>
+        <origin rpy="${link_rpy}" xyz="${link_xyz}"/>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+      </visual>
+      
+      <collision>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+        <origin rpy="${link_rpy}" xyz="${link_xyz}"/>
+      </collision>
+      <xacro:caster_inertial mass="${mass}" radius="${radius}"/>
+    </link>
+    
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+      <origin rpy="${joint_rpy}" xyz="${joint_xyz}"/>
+    </joint>
+    
+    <gazebo reference="${prefix}_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <material>Gazebo/Grey</material>
+      <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+  </xacro:macro>
+  
+</robot>

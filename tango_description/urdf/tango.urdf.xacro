@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<robot name="tango" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:arg name="arc" default="true"/>
+
+  <xacro:include filename="$(find tango_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/chassis_with_lidar.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/chassis_with_kinect.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/rplidar_a2.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/kinect.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/wheel.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/caster.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/bumper.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/imu.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/sonar_sensor.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/infrared_sensor.urdf.xacro"/>
+  <xacro:include filename="$(find tango_description)/urdf/fall_sensor.urdf.xacro"/>
+  
+  <xacro:property name="left" value="1"/>
+  <xacro:property name="right" value="-1"/>
+  
+  <xacro:macro name="create_fixed_link_joint" params="prefix parent joint_xyz joint_rpy">
+    <link name="${prefix}_link"/>
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${joint_xyz}" rpy="${joint_rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <link name="base_footprint"/>
+
+  <xacro:create_fixed_link_joint prefix="bottom_tier" parent="base_footprint" joint_xyz="0 0 ${base_footprint_to_bottom_tier}" joint_rpy="0 0 0"/>
+  <xacro:create_fixed_link_joint prefix="first_tier" parent="bottom_tier_link" joint_xyz="0 0 ${bottom_tier_to_first_tier}" joint_rpy="0 0 0"/>
+  <xacro:create_fixed_link_joint prefix="second_tier" parent="first_tier_link" joint_xyz="0 0 ${first_tier_to_second_tier}" joint_rpy="0 0 0"/>
+  <xacro:create_fixed_link_joint prefix="third_tier" parent="second_tier_link" joint_xyz="0 0 ${second_tier_to_third_tier}" joint_rpy="0 0 0"/>
+  <xacro:create_fixed_link_joint prefix="slam_tier" parent="third_tier_link" joint_xyz="-0.115 0 ${third_tier_to_slam_tier}" joint_rpy="0 0 0"/>
+  
+  <xacro:if value="$(arg arc)">
+    <xacro:chassis_with_lidar prefix="chassis_with_lidar" parent="base_footprint" mass="10.0" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0 0 0" joint_rpy="0 0 0"/>
+    <xacro:lidar prefix="lidar" parent="slam_tier_link" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0 0 0.04" joint_rpy="0 0 0"/>
+  </xacro:if>
+  <xacro:unless value="$(arg arc)">
+    <xacro:chassis_with_kinect prefix="chassis_with_kinect" parent="base_footprint" mass="10.0" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0 0 0" joint_rpy="0 0 0"/>
+    <xacro:kinect prefix="kinect" parent="slam_tier_link" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0 0 0.04" joint_rpy="0 0 ${pi/2}"/>
+    <xacro:create_fixed_link_joint prefix="camera" parent="slam_tier_link" joint_xyz="0 0 0.04" joint_rpy="0 0 0"/>
+  </xacro:unless>
+
+  <xacro:wheel prefix="left" parent="base_footprint" link_xyz="0 0 0" link_rpy="${pi/2} 0  0" joint_xyz="${wheel_center_height} ${(wheel_seperation*left)/2} ${wheel_diameter/2}"  joint_rpy="0 0 0" radius="${wheel_diameter/2}" height="${wheel_thickness}" mass="1.5"/>
+  <xacro:wheel prefix="right" parent="base_footprint" link_xyz="0 0 0" link_rpy="${pi/2} 0  0"  joint_xyz="${wheel_center_height} ${(wheel_seperation*right)/2} ${wheel_diameter/2}"  joint_rpy="0 0 0" radius="${wheel_diameter/2}" height="${wheel_thickness}" mass="1.5"/>
+  <xacro:caster prefix="caster" parent="base_footprint" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="-0.111 0 ${caster_diameter/2}" joint_rpy="0 0 0" mass="0.8" radius="${caster_diameter/2}"/>
+
+  <xacro:imu_sensor  prefix="imu" parent="first_tier_link" joint_xyz="0 0 0.015" joint_rpy="0 0 0"/>  
+  
+  <xacro:bumper prefix="center_bumper" parent="bottom_tier_link" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0.185 0 0"  joint_rpy="0 0 0" mass="0.2" height="0.025" width="0.01" depth="0.105"/>
+  <xacro:bumper prefix="right_bumper" parent="bottom_tier_link" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0.162 ${0.107*right} 0"  joint_rpy="0 0 ${((25*pi)/180)*right}" mass="0.2" height="0.025" width="0.01" depth="0.105"/>
+  <xacro:bumper prefix="left_bumper" parent="bottom_tier_link" link_xyz="0 0 0" link_rpy="0 0 0" joint_xyz="0.162 ${0.107*left} 0"  joint_rpy="0 0 ${((25*pi)/180)*left}" mass="0.2" height="0.025" width="0.01" depth="0.105"/>
+
+  <xacro:ir_sensor prefix="front_c_ir" parent="bottom_tier_link" joint_xyz="0.17 0 0.042" joint_rpy="0 0 0"/>
+  <xacro:ir_sensor prefix="front_r_inner_ir" parent="bottom_tier_link" joint_xyz="0.16 -0.05 0.042" joint_rpy="0 0 ${right*20*(pi/180)}"/>
+  <xacro:ir_sensor prefix="front_r_outer_ir" parent="bottom_tier_link" joint_xyz="0.135 -0.095 0.042" joint_rpy="0 0 ${right*40*(pi/180)}"/>
+  <xacro:ir_sensor prefix="rear_r_ir" parent="bottom_tier_link" joint_xyz="-0.07 -0.14 0.042" joint_rpy="0 0 ${right*120*(pi/180)}"/>
+  <xacro:ir_sensor prefix="rear_l_ir" parent="bottom_tier_link" joint_xyz="-0.07 0.14 0.042" joint_rpy="0 0 ${left*120*(pi/180)}"/>
+  <xacro:ir_sensor prefix="front_l_outer_ir" parent="bottom_tier_link" joint_xyz="0.135 0.095 0.042" joint_rpy="0 0 ${left*40*(pi/180)}"/>
+  <xacro:ir_sensor prefix="front_l_inner_ir" parent="bottom_tier_link" joint_xyz="0.16 0.05 0.042" joint_rpy="0 0 ${left*20*(pi/180)}"/>
+  
+  <xacro:fall_sensor prefix="front_r_fall" parent="bottom_tier_link" joint_xyz="0.126 -0.137 -0.006" joint_rpy="0 0 0"/>
+  <xacro:fall_sensor prefix="rear_r_fall" parent="bottom_tier_link" joint_xyz="-0.13 -0.08 -0.006" joint_rpy="0 0 ${right*327*(pi/180)}"/>
+  <xacro:fall_sensor prefix="rear_l_fall" parent="bottom_tier_link" joint_xyz="-0.13 0.08 -0.006" joint_rpy="0 0 ${left*327*(pi/180)}"/>
+  <xacro:fall_sensor prefix="front_l_fall" parent="bottom_tier_link" joint_xyz="0.126 0.137 -0.006" joint_rpy="0 0 0"/>
+
+  <xacro:sonar_sensor name="front_c_us" parent="first_tier_link" ros_topic="sonar/front_c_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="0.155 0 0.05" rpy="0 0 0"/>
+  </xacro:sonar_sensor>
+  <xacro:sonar_sensor name="front_r_us" parent="first_tier_link" ros_topic="sonar/front_r_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="0.07 -0.14 0.05" rpy="0 0 ${right*62*(pi/180)}"/>
+  </xacro:sonar_sensor>
+    <xacro:sonar_sensor name="rear_r_us" parent="first_tier_link" ros_topic="sonar/rear_r_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="-0.075 -0.14 0.05" rpy="0 0 ${right*120*(pi/180)}"/>
+  </xacro:sonar_sensor>
+    <xacro:sonar_sensor name="rear_c_us" parent="first_tier_link" ros_topic="sonar_height/rear_c_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="-0.155 0 0.05" rpy="0 0 ${pi}"/>
+  </xacro:sonar_sensor>  
+  <xacro:sonar_sensor name="rear_l_us" parent="first_tier_link" ros_topic="sonar/rear_l_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="-0.075 0.14 0.05" rpy="0 0 ${left*120*(pi/180)}"/>
+  </xacro:sonar_sensor>
+    <xacro:sonar_sensor name="front_l_us" parent="first_tier_link" ros_topic="sonar/front_l_us" update_rate="50" min_range="0.04" max_range="5.0" field_of_view="${60*pi/180}" ray_count="3">
+    <origin xyz="0.07 0.14 0.05" rpy="0 0 ${left*62*(pi/180)}"/>
+  </xacro:sonar_sensor>
+
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>20</updateRate>
+      <rosDebugLevel>na</rosDebugLevel>
+      <leftJoint>left_wheel_joint</leftJoint>
+      <rightJoint>right_wheel_joint</rightJoint>
+      <wheelSeparation>${wheel_seperation}</wheelSeparation>
+      <wheelDiameter>${wheel_diameter}</wheelDiameter>
+      <wheelAcceleration>0</wheelAcceleration>
+      <wheelTorque>5</wheelTorque>
+      <odometrySource>world</odometrySource>
+      <torque>20</torque>
+      <commandTopic>/tango/cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <legacyMode>false</legacyMode>
+      <publishWheelTF>true</publishWheelTF>
+      <publishTf>1</publishTf>
+      <publishWheelJointState>false</publishWheelJointState>
+    </plugin>
+  </gazebo>
+  
+  <!--<gazebo>
+    <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+      <robotNamespace>/tango</robotNamespace>
+      <jointName>
+        left_wheel_joint, right_wheel_joint, caster_joint
+      </jointName>
+      <updateRate>100</updateRate>
+      <alwaysOn>true</alwaysOn>
+    </plugin>
+  </gazebo>-->
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/tango</robotNamespace>
+    </plugin>
+  </gazebo>  
+
+</robot>

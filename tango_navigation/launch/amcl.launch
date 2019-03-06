@@ -1,0 +1,14 @@
+<launch>
+  <arg name="scan_topic"     default="laser/scan"/>
+  <arg name="initial_pose_x" default="28.0"/>
+  <arg name="initial_pose_y" default="5.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+
+  <node pkg="amcl" type="amcl" name="amcl">
+    <rosparam file="$(find tango_navigation)/param/amcl.yaml" command="load" />
+    <remap from="scan" to="$(arg scan_topic)"/>
+    <remap from="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <remap from="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <remap from="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </node>
+</launch>

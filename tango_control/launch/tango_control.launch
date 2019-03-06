@@ -1,0 +1,19 @@
+<launch>
+
+  <rosparam file="$(find tango_control)/config/tango_control.yaml" command="load"/>
+
+  <node name="controller_spawner"
+    pkg="controller_manager"
+    type="spawner" respawn="false"
+    output="screen" ns="tango"
+    args="joint_state_controller
+      rightWheel_effort_controller
+      leftWheel_effort_controller"
+  />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find tango_description)/urdf/tango.urdf.xacro'" />
+    <remap from="/joint_states" to="joint_states" />
+  </node>
+
+</launch>

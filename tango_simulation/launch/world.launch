@@ -1,0 +1,17 @@
+<launch>	  
+  <include file="$(find tango_control)/launch/tango_control.launch" />
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">	    
+    <arg name="world_name" value="$(find tango_simulation)/worlds/maze.world"/>	    
+    <arg name="gui" value="true"/>	  
+  </include>	
+  
+  <arg name="arc"/>
+  
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find tango_description)/urdf/tango.urdf.xacro' --inorder arc:=$(arg arc)"/>
+
+  <node name="diff_tf" pkg="differential_drive" type="diff_tf.py" output="screen"/>
+
+  <node name="tango_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model tango verbose=true" />
+
+</launch>

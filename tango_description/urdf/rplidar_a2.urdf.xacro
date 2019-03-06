@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot name="rplidar_a2" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="rplidar_a2_mesh" value="package://tango_description/meshes/visual_model/rplidar_a2.dae"/>
+  <xacro:property name="rplidar_a2_collision_mesh" value="package://tango_description/meshes/collision_model/slam_collision.dae"/>
+  <xacro:property name="rplidar_a2_mass" value="0.340"/>
+
+  <xacro:macro name="rplidar_a2_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="0.0004827" ixy="-0.0000041" ixz="0.0000048" iyy="0.0004946" iyz="-0.0000173" izz="0.0007809" />
+    </inertial>
+  </xacro:macro>
+  
+  <xacro:macro name="lidar" params="prefix parent link_xyz link_rpy joint_xyz joint_rpy">
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <mesh filename="${rplidar_a2_mesh}"/>
+        </geometry>
+        <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
+      </visual>
+      
+      <collision>
+        <geometry>
+          <mesh filename="${rplidar_a2_collision_mesh}"/>
+        </geometry>
+        <origin xyz="${link_xyz}" rpy="${link_rpy}"/>
+      </collision>
+        <xacro:rplidar_a2_inertial mass="${rplidar_a2_mass}"/>
+    </link>
+    
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${joint_xyz}" rpy="${joint_rpy}"/>
+    </joint>
+  
+    <gazebo reference="${prefix}_link">
+      <sensor type="ray" name="head_hokuyo_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>6.0</max>
+            <resolution>0.1</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <topicName>/laser/scan</topicName>
+          <frameName>${prefix}_link</frameName>
+	  <frameid>/base_laser</frameid>
+        </plugin>
+      </sensor>
+      <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+  
+  </xacro:macro>
+</robot>
